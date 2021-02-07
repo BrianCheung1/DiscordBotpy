@@ -4,6 +4,7 @@ import asyncio
 import random
 from aiohttp import request
 
+
 class Animal(commands.Cog):
     """Prints Random Animal Fact"""
 

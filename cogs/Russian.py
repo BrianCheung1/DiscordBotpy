@@ -21,6 +21,7 @@ class Russian(commands.Cog):
         self.game_started = True
         self.start_message = await ctx.channel.send('Click the Check emoji to join')
         await self.start_message.add_reaction('✅')
+        await ctx.channel.send('`start to start game')
         self.message_id = self.start_message.id
 
     @commands.Cog.listener()

@@ -3,6 +3,7 @@ from discord.ext import commands
 import asyncio
 import re
 from pytz import timezone
+from datetime import datetime
 
 class MessageLogger(commands.Cog):
     """Logs Messsage sent in server"""
@@ -13,11 +14,13 @@ class MessageLogger(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, ctx):
         bad_words = ['fuck', 'gay', 'fk', 'shit', 'fuq', 'fuk']
-        current_timezone_time = ctx.created_at.replace(tzinfo=timezone('UTC')).astimezone(timezone('US/Eastern'))
-        new_timezone_time = current_timezone_time.astimezone(timezone('US/Eastern'))
+        #current_timezone_time = ctx.created_at.replace(tzinfo=timezone('UTC')).astimezone(timezone('US/Eastern'))
+        #new_timezone_time = current_timezone_time.astimezone(timezone('US/Eastern'))
+        now = datetime.now()
+        dt_string = now.strftime("%m/%d/%Y %H:%M:%S")
 
         #logs messages from users of the guild to console
-        print('Message from {0.author} in "{0.channel}": {0.content}'.format(ctx))
+        print('[{}] '.format(dt_string) + 'Message from {0.author} in "{0.channel}": {0.content}'.format(ctx))
         #if the author of a message is a bot stop
         if ctx.author.bot:
             return

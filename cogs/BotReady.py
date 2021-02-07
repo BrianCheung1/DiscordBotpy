@@ -13,6 +13,9 @@ class BotReady(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         print('Logged on as {0}!'.format(self.bot.user))
+        channel = self.bot.get_channel(441644928750321664)
+        await channel.send('Bot is running')
+
 
     async def my_background_task(self):
         await self.bot.wait_until_ready()

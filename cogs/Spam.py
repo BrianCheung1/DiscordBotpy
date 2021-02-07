@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import asyncio
 
+
 class Spam(commands.Cog):
     """spams a channel"""
 
@@ -13,10 +14,11 @@ class Spam(commands.Cog):
 
     @commands.command()
     @commands.check(check_if_it_is_me)
-    async def spam(self, ctx, arg = 1):
+    async def spam(self, ctx, members: discord.Member = None, arg=1):
         for i in range(arg):
-            await ctx.channel.send("FUCK")
+            await ctx.channel.send("Fuck {}, that bitch gay".format(members.mention))
             await asyncio.sleep(0.5)
+
 
 def setup(bot):
     bot.add_cog(Spam(bot))

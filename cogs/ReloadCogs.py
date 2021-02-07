@@ -19,7 +19,7 @@ class ReloadCogs(commands.Cog):
         if not ctx.author.guild_permissions.administrator:
             return
 
-        for filename in os.listdir(f"E:/codes/Python/DiscordBotpy/cogs"):
+        for filename in os.listdir(f"C:/Codes/Python/DiscordBotpy/cogs"):
             if filename.endswith('.py'):
                 self.bot.reload_extension(f'cogs.{filename[:-3]}')
         await ctx.channel.send('Cogs Reloaded')
