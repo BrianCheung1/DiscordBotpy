@@ -9,14 +9,10 @@ class Spam(commands.Cog):
     def __init__(self, bot, *args, **kwargs):
         self.bot = bot
 
-    def check_if_it_is_me(ctx):
-        return ctx.message.author.id == 706279634672549989
-
     @commands.command()
-    @commands.check(check_if_it_is_me)
     async def spam(self, ctx, members: discord.Member = None, arg=1):
         for i in range(arg):
-            await ctx.channel.send("Fuck {}, that bitch gay".format(members.mention))
+            await ctx.channel.send("Spam {}".format(members.mention))
             await asyncio.sleep(0.5)
 
 
