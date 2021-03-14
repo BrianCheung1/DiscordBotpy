@@ -11,6 +11,9 @@ class Spam(commands.Cog):
 
     @commands.command()
     async def spam(self, ctx, members: discord.Member = None, arg=1):
+        if arg > 10:
+            await ctx.channel.send("Max 10 Spam")
+            return
         for i in range(arg):
             await ctx.channel.send("Spam {}".format(members.mention))
             await asyncio.sleep(0.5)
