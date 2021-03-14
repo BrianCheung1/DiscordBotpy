@@ -71,24 +71,28 @@ class Bitcoin(commands.Cog):
             await ctx.send("Invalid Coin/Input - Correct Input : `hist {Crypto Coin} {YYYY-MM-DD}")
             return
 
-        daily = (price_now - float(
+        daily = (price_now - float(     
             requests.get('https://api.coinbase.com/v2/prices/{}-USD/spot?date={}'.format(arg, yesterday)).json()[
-                'data']['amount'])) / float(
+                'data']['amount']))
+
+        daily = daily / float(     
             requests.get('https://api.coinbase.com/v2/prices/{}-USD/spot?date={}'.format(arg, yesterday)).json()[
                 'data']['amount'])
 
         weekly = (price_now - float(
             requests.get('https://api.coinbase.com/v2/prices/{}-USD/spot?date={}'.format(arg, lastweek)).json()[
-                'data']['amount'])) / float(
+                'data']['amount']))
+        weekly = weekly / float(
             requests.get('https://api.coinbase.com/v2/prices/{}-USD/spot?date={}'.format(arg, lastweek)).json()[
                 'data']['amount'])
 
         monthly = (price_now - float(
             requests.get('https://api.coinbase.com/v2/prices/{}-USD/spot?date={}'.format(arg, lastmonth)).json()[
-                'data']['amount'])) / float(
+                'data']['amount']))
+        monthly = monthly / float(
             requests.get('https://api.coinbase.com/v2/prices/{}-USD/spot?date={}'.format(arg, lastmonth)).json()[
                 'data']['amount'])
-
+        
         # if no date added to arguments
         if not arg1:
             # first date format is UTC
@@ -179,40 +183,18 @@ class Bitcoin(commands.Cog):
             embed.add_field(name='Price on {}: '.format(arg1), value="` " + as_currency(float(rate['amount'])) + " `",
                             inline=False)
 
-            date_change = (price_now - float(rate['amount'])) / float(rate['amount'])
+            date_change = 0
+            if price_now > float(rate['amount']):
+                date_change = price_now - float(rate['amount'])
+                print(date_change)
+                date_change = date_change / float(rate['amount'])
+
 
             embed.add_field(name='Percent Change: ',
                             value="` " + str('{:.2%}'.format(date_change)) + " `", inline=True)
             embed.set_footer(text="Powered by Coinbase")
             await ctx.send(content=None, embed=embed)
 
-    @commands.command()
-    async def plot(self, ctx):
-        price_now = float(requests.get('https://api.coinbase.com/v2/prices/BTC-USD/spot').json()[
-                              'data']['amount'])
-        yesterday = float(requests.get('https://api.coinbase.com/v2/prices/BTC-USD/spot?date=2021-01-03').json()[
-                              'data']['amount'])
-        yesterday_yesterday = float(
-            requests.get('https://api.coinbase.com/v2/prices/BTC-USD/spot?date=2021-01-02').json()[
-                'data']['amount'])
-        plt.plot([yesterday_yesterday, yesterday, price_now])
-        plt.annotate(as_currency(yesterday_yesterday),
-                     (0, yesterday_yesterday),
-                     textcoords="offset points",
-                     xytext=(0, 10),
-                     ha='center')
-
-        price_now -= price_now % -10000
-        plt.axis([0, 6, 0, price_now])
-
-        plt.title('Bitcoin\'s Graph')
-        plt.xlabel('Dates')
-        plt.ylabel('Prices')
-
-        plt.savefig(fname='plot')
-        await ctx.send(file=discord.File('plot.png'))
-        plt.clf()
-        os.remove('plot.png')
 
     @commands.command(aliases=['ex'])
     async def exchange(self, ctx, arg=0.0, arg1='BTC'):
@@ -222,11 +204,11 @@ class Bitcoin(commands.Cog):
         embed = discord.Embed(title="Crypto Exchange Rates", color=ctx.author.color)
         embed.set_thumbnail(url='https://i.imgur.com/M6P1II5.png')
 
-        if arg == 0 and arg1 is 'BTC':
+        if arg == 0 and arg1 == 'BTC':
             converted_price = arg * rate
             embed.add_field(name='Rate: ', value='` {} ` BTC to USD: ` {} `'.format(arg, as_currency(converted_price)))
             await ctx.send(content=None, embed=embed)
-        elif arg != 0 and arg1 is 'BTC':
+        elif arg != 0 and arg1 == 'BTC':
             converted_price = arg * rate
             embed.add_field(name='Rate: ', value='` {} ` BTC to USD: ` {} `'.format(arg, as_currency(converted_price)))
             await ctx.send(content=None, embed=embed)
