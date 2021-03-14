@@ -15,7 +15,7 @@ bot.remove_command('help')
 
 if __name__ == '__main__':
     # for extension in initial_extensions:
-    for filename in os.listdir(f"C:/Codes/Python/DiscordBotpy/DiscordBotpy/cogs"):
+    for filename in os.listdir(f"./cogs"):
         if filename.endswith('.py'):
             bot.load_extension(f'cogs.{filename[:-3]}')
 
