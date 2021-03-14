@@ -12,7 +12,6 @@ class Help(commands.Cog):
     async def help(self, ctx):
         embed = discord.Embed(title="Commands", description='Information on commands', colour = ctx.author.colour)
         embed.set_thumbnail(url=ctx.author.avatar_url)
-        embed.add_field(name='`* Represents optional arguments`', value="test")
         embed.add_field(name='``balance`', value="Shows balance of user")
         embed.add_field(name='``bj *amount`', value="Starts a game of blackjack, optional: bet amount")
         embed.add_field(name='``crypto *symbol`', value="Shows the price of crpyto currency")
@@ -32,6 +31,7 @@ class Help(commands.Cog):
         embed.add_field(name='``stats`', value="Shows stats for hangman")
         embed.add_field(name='``unmute`', value="unmutes all user in channel")
         embed.add_field(name='``urban [word]`', value="Provides urbandictionary definiton of given word")
+        embed.set_footer(text='`* Represents optional arguments`')
         await ctx.channel.send(content=None, embed=embed)
 
 def setup(bot):
