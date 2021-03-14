@@ -5,7 +5,6 @@ import requests
 from datetime import date
 from datetime import datetime, timedelta
 import datetime
-import matplotlib.pyplot as plt
 import os
 from discord.ext import tasks
 
@@ -74,7 +73,6 @@ class Bitcoin(commands.Cog):
         daily = (price_now - float(     
             requests.get('https://api.coinbase.com/v2/prices/{}-USD/spot?date={}'.format(arg, yesterday)).json()[
                 'data']['amount']))
-
         daily = daily / float(     
             requests.get('https://api.coinbase.com/v2/prices/{}-USD/spot?date={}'.format(arg, yesterday)).json()[
                 'data']['amount'])
@@ -111,20 +109,6 @@ class Bitcoin(commands.Cog):
                 await ctx.send("Invalid Coin/Input - Correct Input : `hist {Crypto Coin} {YYYY-MM-DD}")
                 return
 
-            # # if day hasn't reached 7pm will print price of coin now
-            # try:
-            #     rate = requests.get('https://api.coinbase.com/v2/prices/{}-USD/spot?date={}'.format(arg, today)).json()[
-            #         'data']
-            #     embed.add_field(name='Price Today: ', value="` " + as_currency(float(rate['amount'])) + " `",
-            #                     inline=False)
-            # except KeyError:
-            #     # if coin does not exist will price error
-            #     try:
-            #         rate = requests.get('https://api.coinbase.com/v2/prices/{}-USD/spot'.format(arg)).json()['data']
-            #         embed.add_field(name='Price Today: ', value="` " + as_currency(float(rate['amount'])) + " `",
-            #                         inline=False)
-            #     except KeyError:
-            #         await ctx.send("Invalid Coin/Input - Correct Input : `hist {Crypto Coin} {YYYY-MM-DD}")
 
             rate = requests.get('https://api.coinbase.com/v2/prices/{}-USD/spot?date={}'.format(arg, yesterday)).json()[
                 'data']
