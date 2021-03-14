@@ -1,8 +1,0 @@
-{
-    "token": "",
-
-    "prefix_settings" : {
-        "prefix" : "sudo",
-        "use_space" : true
-    }
-}
