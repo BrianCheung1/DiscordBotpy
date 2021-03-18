@@ -31,7 +31,7 @@ class Help(commands.Cog):
         embed.add_field(name='``stats`', value="Shows stats for hangman")
         embed.add_field(name='``unmute`', value="unmutes all user in channel")
         embed.add_field(name='``urban [word]`', value="Provides urbandictionary definiton of given word")
-        embed.set_footer(text='`* Represents optional arguments`')
+        embed.set_footer(text='* Represents optional arguments')
         await ctx.channel.send(content=None, embed=embed)
 
 def setup(bot):

@@ -4,9 +4,13 @@ import traceback
 import os
 import sys
 import json
+from dotenv import load_dotenv
 
-with open('./config.json', 'r') as cjson:
-    config = json.load(cjson)
+load_dotenv()
+token = os.getenv("token")
+
+# with open('./config.json', 'r') as cjson:
+#     config = json.load(cjson)
 
 intents = discord.Intents.all()
 
@@ -19,4 +23,4 @@ if __name__ == '__main__':
         if filename.endswith('.py'):
             bot.load_extension(f'cogs.{filename[:-3]}')
 
-bot.run(config['token'])
+bot.run(token)

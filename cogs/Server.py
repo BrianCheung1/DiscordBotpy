@@ -57,7 +57,6 @@ def usercount(self, ctx):
     self.bot_count = 0
 
     # loops through members to see their status
-    print(ctx.guild.members)
     for members in ctx.author.guild.members:
         if members.status != discord.Status.offline and not members.bot:
             self.online_count += 1

@@ -16,32 +16,23 @@ class Profile(commands.Cog):
         self.wins = 0
         self.losses = 0
         self.money_balance = 0
-        if members == None:
-            changeroles(self,ctx,members)
-            
-            changestats(self, ctx, members)
+        changeroles(self,ctx,members)
 
-            embed = sendprofile(self,ctx,members)
-            await ctx.channel.send(embed=embed)
-
-        if members:
-            changeroles(self,ctx,members)
-
-            changestats(self, ctx, members)
-            
-            embed = sendprofile(self, ctx, members)
-            await ctx.channel.send(embed=embed)
+        changestats(self, ctx, members)
+        
+        embed = sendprofile(self, ctx, members)
+        await ctx.channel.send(embed=embed)
  
 def sendprofile(self, ctx, members: discord.Member=None):
     if members == None:
         members = ctx.author
     embed = discord.Embed(title=str(members.name) + "'s Profile", description="Information On " + str(members.name))
     embed.set_thumbnail(url=members.avatar_url)
-    embed.add_field(name="Discord Tag: ", value= "` " + str(members.nick) + " ` ", inline=False)
-    embed.add_field(name="Account Creation Date: ", value="` " +  str(members.created_at.strftime("%A, %B %d %Y @ %H:%M:%S %p")) + " ` ", inline=False)
-    embed.add_field(name="Join Date: ", value= "` " +  str(members.joined_at.strftime("%A, %B %d %Y @ %H:%M:%S %p")) + " ` ", inline=False)
+    embed.add_field(name="Discord Tag: ", value= "` " + str(members.nick) + " `", inline=False)
+    embed.add_field(name="Account Creation Date: ", value="` " +  str(members.created_at.strftime("%A, %B %d %Y @ %H:%M:%S %p")) + " `", inline=False)
+    embed.add_field(name="Join Date: ", value= "` " +  str(members.joined_at.strftime("%A, %B %d %Y @ %H:%M:%S %p")) + " `", inline=False)
     embed.add_field(name="Roles: ", value= self.userroles, inline=False)
-    embed.add_field(name="Activity: ", value="` " + str(members.activity) + "`", inline=False)
+    embed.add_field(name="Activity: ", value="` " + str(members.activity) + " `", inline=False)
     embed.add_field(name="Profile Pic: ", value= members.avatar_url, inline=False)
     embed.add_field(name="Hangman Stats: ", value='` Wins: ' + str(self.wins) + ' Losses: ' + str(self.losses) + ' `')
     embed.add_field(name="Balance: ", value='` $' + str(self.money_balance) + ' `', inline= False)
@@ -72,7 +63,7 @@ def changeroles(self, ctx, members: discord.Member=None):
     for role in members.roles:
         self.userroles += "` "
         self.userroles += role.name
-        self.userroles += " ` "
+        self.userroles += " `"
     self.userroles = self.userroles.replace('@', '', 1)
 
 def setup(bot):
