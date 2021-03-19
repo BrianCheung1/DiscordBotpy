@@ -19,7 +19,7 @@ class BotReady(commands.Cog):
 
     async def my_background_task(self):
         await self.bot.wait_until_ready()
-        listofactivities = ['You', 'This Server', 'Youtube', 'Onlyfans', 'Porn', 'A Movie']
+        listofactivities = ['`help']
         while not self.bot.is_closed():
             randomactivity = random.choice(listofactivities)
             await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=str(randomactivity)))

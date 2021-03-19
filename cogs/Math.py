@@ -6,7 +6,7 @@ class Math(commands.Cog):
         self.bot = bot
 
     @commands.command()
-    async def test(self, ctx, *, arg=None):
+    async def math(self, ctx, *, arg=None):
         if arg is None:
             await ctx.channel.send("No Arguments Provided")
         else:
