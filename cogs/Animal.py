@@ -2,7 +2,14 @@ import discord
 from discord.ext import commands
 import asyncio
 import random
+import os
 from aiohttp import request
+from dotenv import load_dotenv
+
+load_dotenv()
+x_rapidapi_host = os.getenv("x-rapidapi-host")
+x_rapidapi_key = os.getenv("x-rapidapi-key")
+Authorization = os.getenv("Authorization")
 
 
 class Animal(commands.Cog):
@@ -41,8 +48,8 @@ class Animal(commands.Cog):
         querystring = {"term": arg}
 
         headers = {
-            'x-rapidapi-host': "mashape-community-urban-dictionary.p.rapidapi.com",
-            'x-rapidapi-key': "bb2880de7bmsh061041d4a8034f4p124f95jsnb4a6f4b9aa88"
+            'x-rapidapi-host': x_rapidapi_host,
+            'x-rapidapi-key': x_rapidapi_key
         }
 
         async with request("GET", url, headers=headers, params=querystring) as response:
@@ -56,7 +63,7 @@ class Animal(commands.Cog):
     @commands.command()
     async def twitter(self, ctx, arg=None):
         url = 'https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=NobodySpecialO&count=2'
-        headers = {'Authorization': 'Bearer AAAAAAAAAAAAAAAAAAAAAAXGMwEAAAAAynZLC2DcmdPgMpCxJ4JjuaiENDk%3DIKgusS5I46HBGjpcIPNnrHLbNycPyFMvWwUCSpve8DJZq7fPGK'}
+        headers = {'Authorization': Authorization}
 
         querystring = {}
         async with request("GET", url, headers=headers, params=querystring) as response:
@@ -67,7 +74,6 @@ class Animal(commands.Cog):
                 await ctx.send(data[0]['text'])
                 await ctx.send(data[1]['created_at'])
                 await ctx.send(data[1]['text'])
-
 
 
 def setup(bot):
