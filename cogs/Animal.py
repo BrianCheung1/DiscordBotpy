@@ -26,7 +26,7 @@ class Animal(commands.Cog):
         async with request("GET", URL, headers={}) as response:
             if response.status == 200:
                 data = await response.json()
-                await ctx.send(data["fact"])
+                await ctx.send(f'`{data["fact"]}`')
             else:
                 await ctx.send(f"API returned a {response.status} status.")
 
