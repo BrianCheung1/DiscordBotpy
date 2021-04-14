@@ -15,7 +15,8 @@ class Spam(commands.Cog):
             await ctx.channel.send("Max 10 Spam")
             return
         for i in range(arg):
-            await ctx.channel.send("Spam {}".format(members.mention))
+            msg = await ctx.channel.send("Spam {}".format(members.mention))
+            await msg.delete()
             await asyncio.sleep(0.5)
 
 
