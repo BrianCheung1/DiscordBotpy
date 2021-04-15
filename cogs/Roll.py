@@ -3,14 +3,16 @@ from discord.ext import commands
 import asyncio
 import random
 
+
 class Roll(commands.Cog):
     """Rolls a dice"""
 
     def __init__(self, bot, *args, **kwargs):
         self.bot = bot
-    
+
     @commands.command()
     async def roll(self, ctx, *args):
+        """Rolls a dice"""
         if not args:
             randomnumber = random.randint(1, 6)
             if (randomnumber == 1):
@@ -50,7 +52,8 @@ class Roll(commands.Cog):
                 if numbers == '0':
                     printnumber += "0️⃣"
             await ctx.channel.send(printnumber)
-            
+
+
 def setup(bot):
     bot.add_cog(Roll(bot))
     print('Roll is loaded')

@@ -17,7 +17,7 @@ class Server(commands.Cog):
 
     @commands.command()
     async def server(self, ctx):
-
+        """Prints information about server"""
         usercount(self, ctx)
         channelcount(self, ctx)
 
@@ -49,7 +49,7 @@ class Server(commands.Cog):
         embed.add_field(name="Voice Channels ", value="` " +
                         str(self.voice_channels) + " `", inline=True)
         embed.add_field(name="Boosters ", value="` " +
-                        str(boostercount(self,ctx)) + " `", inline=True)
+                        str(boostercount(self, ctx)) + " `", inline=True)
         await ctx.channel.send(content=None, embed=embed)
 
 
@@ -79,12 +79,14 @@ def channelcount(self, ctx):
     for x in ctx.guild.categories:
         self.categories += 1
 
-def boostercount(self,ctx):
+
+def boostercount(self, ctx):
     boosters = 0
     for x in ctx.guild.premium_subscribers:
-        boosters+= 1
+        boosters += 1
     return boosters
-    
+
+
 def setup(bot):
     bot.add_cog(Server(bot))
     print("Server is loaded")

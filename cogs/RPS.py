@@ -5,14 +5,14 @@ import random
 
 
 class RPS(commands.Cog):
-    """Play rock paper scissors"""
+    """Play rock paper scissors with the bot"""
 
     def __init__(self, bot, *args, **kwargs):
         self.bot = bot
 
     @commands.command()
     async def rps(self, ctx, arg):
-
+        """Starts a game of rock paper scissors"""
         rps = ['✊', '🖐️', '✌️']
         randomrps = random.choice(rps)
 

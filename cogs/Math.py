@@ -2,6 +2,8 @@ import discord
 from discord.ext import commands
 
 class Math(commands.Cog):
+    """Simple Math Calculations"""
+
     def __init__(self, bot, *args, **kwargs):
         self.bot = bot
 

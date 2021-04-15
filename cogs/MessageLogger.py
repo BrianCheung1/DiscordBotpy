@@ -39,18 +39,14 @@ class MessageLogger(commands.Cog):
         #     await ctx.channel.send('Message by ' + ctx.author + ' Got Censored. Message Censored: `' + ctx.content + '`')
         #await self.bot.process_commands(ctx)
 
-    @commands.command()
-    async def code(self, ctx):
-        await ctx.channel.send('discord.gift/abcdefg')
-
-    @commands.command()
-    async def role(self, ctx, arg=None):
-        self.players = []
-        self.player_list = ""
-        self.message_id = ""
-        self.role_message = await ctx.channel.send('Click to receive role ' + arg)
-        await self.role_message.add_reaction('✅')
-        self.message_id = self.role_message.id
+    # @commands.command()
+    # async def role(self, ctx, arg=None):
+    #     self.players = []
+    #     self.player_list = ""
+    #     self.message_id = ""
+    #     self.role_message = await ctx.channel.send('Click to receive role ' + arg)
+    #     await self.role_message.add_reaction('✅')
+    #     self.message_id = self.role_message.id
 
     @commands.Cog.listener()
     async def on_reaction_add(self,reaction,user):

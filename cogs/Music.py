@@ -18,7 +18,8 @@ ytdl_format_options = {
     'quiet': True,
     'no_warnings': True,
     'default_search': 'auto',
-    'source_address': '0.0.0.0' # bind to ipv4 since ipv6 addresses cause issues sometimes
+    # bind to ipv4 since ipv6 addresses cause issues sometimes
+    'source_address': '0.0.0.0'
 }
 
 ffmpeg_options = {
@@ -55,15 +56,18 @@ class YTDLSource(discord.PCMVolumeTransformer):
         if 'entries' in data:
             # take first item from a playlist
             data = data['entries'][0]
-        
+
         filename = data['url'] if stream else ytdl.prepare_filename(data)
         return cls(discord.FFmpegPCMAudio(filename, **ffmpeg_options), data=data, requester=ctx.author)
-        
+
+
 class Music(commands.Cog):
+    """Plays Music In Channel Of User"""
+
     def __init__(self, bot, *args, **kwargs):
         self.bot = bot
 
-    @commands.command(aliases =['connect'])
+    @commands.command(aliases=['connect'])
     async def join(self, ctx, *arg):
         if ctx.author.voice is None:
             await ctx.channel.send("You're not connected to a voice channel")
@@ -77,7 +81,7 @@ class Music(commands.Cog):
                 channel = ctx.author.voice.channel
                 await channel.connect()
 
-    @commands.command(aliases =['stop'])
+    @commands.command(aliases=['stop'])
     async def leave(self, ctx):
         try:
             await ctx.voice_client.disconnect()
@@ -86,7 +90,7 @@ class Music(commands.Cog):
             await channel.connect()
             await ctx.voice_client.disconnect()
 
-    @commands.command(aliases =['play'])
+    @commands.command(aliases=['play'])
     async def yt(self, ctx, *, search: str):
         """Plays from a url (almost anything youtube_dl supports)"""
         async with ctx.typing():
@@ -102,8 +106,9 @@ class Music(commands.Cog):
                     await channel.connect()
 
             player = await YTDLSource.create_source(ctx, search, loop=self.bot.loop, download=False)
-            
-            ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
+
+            ctx.voice_client.play(player, after=lambda e: print(
+                'Player error: %s' % e) if e else None)
 
         await ctx.send('Now playing: {}'.format(player.title))
 
@@ -166,9 +171,10 @@ class Music(commands.Cog):
 
         if not vc or not vc.is_connected():
             return await ctx.send('I am not currently connected to voice!')
-        
+
         await ctx.channel.send(f'**Now Playing:** `{vc.source.title}` requested by '
-                                               f'`{vc.source.requester}`')
+                               f'`{vc.source.requester}`')
+
 
 def setup(bot):
     bot.add_cog(Music(bot))

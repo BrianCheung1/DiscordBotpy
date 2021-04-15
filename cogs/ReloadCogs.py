@@ -17,6 +17,7 @@ class ReloadCogs(commands.Cog):
     @commands.command()
     # reloads all the extensions in the list
     async def reload(self, ctx):
+        "Reloads cogs"
         if not ctx.author.guild_permissions.administrator:
             return
 
@@ -29,6 +30,7 @@ class ReloadCogs(commands.Cog):
     @commands.command()
     # loads extensions manually
     async def load(self, ctx, extension):
+        "Loads a cog"
         try:
             self.bot.load_extension(f'cogs.{extension}')
             await ctx.channel.send('{} Loaded'.format(extension))
@@ -40,6 +42,7 @@ class ReloadCogs(commands.Cog):
     @commands.command()
     # unloads extensions manually
     async def unload(self, ctx, extension):
+        "unloads a cog"
         try:
             self.bot.unload_extension(f'cogs.{extension}')
             await ctx.channel.send('{} unloaded'.format(extension))
