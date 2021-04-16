@@ -52,8 +52,14 @@ def sendprofile(self, ctx, members: discord.Member = None):
         activity = "None"
     embed.add_field(name="Activity: ", value="` " +
                     str(activity) + " `", inline=False)
+    if members.premium_since == None:
+        premium_since = "None"
+    else:
+        premium_since = members.premium_since.strftime(
+            "%A, %B %d %Y @ %H:%M:%S %p")
     embed.add_field(name="Boosted Server On: ", value="` " +
-                    str(members.premium_since.strftime("%A, %B %d %Y @ %H:%M:%S %p")) + " `", inline=False)
+                    str(premium_since) + " `", inline=False)
+
     embed.add_field(name="Profile Pic: ",
                     value=members.avatar_url, inline=False)
     embed.add_field(name="Hangman Stats: ", value='` Wins: ' +
