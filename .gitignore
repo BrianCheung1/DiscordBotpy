@@ -139,3 +139,5 @@ cython_debug/
 *.pyc
 *.json
 ffmpeg.exe
+stats.txt
+balance.txt
