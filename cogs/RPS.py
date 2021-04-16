@@ -11,8 +11,13 @@ class RPS(commands.Cog):
         self.bot = bot
 
     @commands.command()
-    async def rps(self, ctx, arg):
+    async def rps(self, ctx, arg=None):
         """Starts a game of rock paper scissors"""
+
+        if arg == None:
+            await ctx.channel.send("Please enter rock, paper, scissors")
+            return
+
         rps = ['✊', '🖐️', '✌️']
         randomrps = random.choice(rps)
 
