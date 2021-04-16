@@ -157,7 +157,7 @@ class Help(commands.Cog):
 
                     # making title - getting description from doc-string below class
                     emb = discord.Embed(title=f'Commands in {cog}', description=self.bot.cogs[cog].__doc__,
-                                        color=random_color)
+                                        color=random_color())
                     emb.set_thumbnail(url='https://i.imgur.com/h6TUQLa.jpg')
                     # getting commands from cog
                     for command in self.bot.get_cog(cog).get_commands():
