@@ -141,3 +141,5 @@ cython_debug/
 ffmpeg.exe
 stats.txt
 balance.txt
+balance.txt
+stats.txt
