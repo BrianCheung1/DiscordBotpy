@@ -10,8 +10,25 @@ class Spam(commands.Cog):
         self.bot = bot
 
     @commands.command()
-    async def spam(self, ctx, members: discord.Member = None, text=None, amount=1):
+    async def spam(self, ctx, members: discord.Member = None):
         """spams a user with custom message a certain amount of times"""
+
+        await ctx.channel.send("How many mesasges do you want sent? ")
+
+        def check(m):
+            if m.author == ctx.author:
+                return m.content
+
+        amount = await self.bot.wait_for('message', check=check)
+        try:
+            amount = int(amount.content)
+        except ValueError:
+            await ctx.channel.send("Not an Interger")
+            return
+
+        await ctx.channel.send("What mesasges do you want sent? ")
+        text = await self.bot.wait_for('message', check=check)
+        text = str(text.content)
 
         if amount > 10:
             await ctx.channel.send("Max 10 Spam")
