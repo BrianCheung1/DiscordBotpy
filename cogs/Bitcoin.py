@@ -214,6 +214,14 @@ class Bitcoin(commands.Cog):
                 arg, arg1.upper(),  as_currency(converted_price)))
             await ctx.send(content=None, embed=embed)
 
+    @commands.command(aliases=['tx'])
+    async def transaction(self, ctx, arg=None):
+        """returns link to memepool tranasction"""
+        if arg == None:
+            await ctx.channel.send("Please Provide Transaction ID")
+        else:
+            await ctx.channel.send(f'https://mempool.space/tx/{arg}')
+
 # converts floats in dollar amount
 
 
