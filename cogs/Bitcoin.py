@@ -19,6 +19,8 @@ class Bitcoin(commands.Cog):
     @commands.command(aliases=['btc', 'eth', 'ltc', 'doge', 'cry'])
     async def crypto(self, ctx, arg=None):
         """fetches a crypto coin current price"""
+        now = datetime.now()
+        dt_string = now.strftime("%m/%d/%Y %H:%M:%S")
 
         # COINBASE API
         if not arg:
