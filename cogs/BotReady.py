@@ -3,6 +3,14 @@ from discord.ext import commands
 import asyncio
 import random
 import requests
+from requests import Request, Session
+from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
+import json
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+CMC_PRO_API_KEY = os.getenv("X-CMC_PRO_API_KEY")
 
 
 class BotReady(commands.Cog):
@@ -20,19 +28,41 @@ class BotReady(commands.Cog):
 
     async def my_background_task(self):
         await self.bot.wait_until_ready()
-        btc_price = as_currency(requests.get(
-            'https://api.coinbase.com/v2/prices/BTC-USD/spot').json()['data']['amount'])
-        eth_price = as_currency(requests.get(
-            'https://api.coinbase.com/v2/prices/ETH-USD/spot').json()['data']['amount'])
-        ltc_price = as_currency(requests.get(
-            'https://api.coinbase.com/v2/prices/LTC-USD/spot').json()['data']['amount'])
 
-        listofactivities = [f'BTC: {btc_price}',
-                            f'ETH: {eth_price}', f'LTC: {ltc_price}']
+        btc_price = as_currency(float(requests.get(
+            'https://api.coinbase.com/v2/prices/BTC-USD/spot').json()['data']['amount']))
+        eth_price = as_currency(float(requests.get(
+            'https://api.coinbase.com/v2/prices/ETH-USD/spot').json()['data']['amount']))
+        ltc_price = as_currency(float(requests.get(
+            'https://api.coinbase.com/v2/prices/LTC-USD/spot').json()['data']['amount']))
+
+        url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=DOGE,SAFEMOON&convert=USD'
+        headers = {
+            'Accepts': 'application/json',
+            'X-CMC_PRO_API_KEY': CMC_PRO_API_KEY,
+        }
+
+        session = Session()
+        session.headers.update(headers)
+
+        try:
+            response = session.get(url)
+            data = json.loads(response.text)
+            doge_price = as_currency(
+                data['data']['DOGE']['quote']['USD']['price'])
+            safemoon_price = float(
+                data['data']['SAFEMOON']['quote']['USD']['price'])
+            safemoon_price = '{:,.8f}'.format(safemoon_price)
+        except (ConnectionError, Timeout, TooManyRedirects) as e:
+            print(e)
+
+        listofactivities = [f'BTC at {btc_price}',
+                            f'ETH at {eth_price}', f'LTC at {ltc_price}', f'DOGE at {doge_price}', f'SAFEMOON at ${safemoon_price}']
+
         while not self.bot.is_closed():
-            randomactivity = random.choice(listofactivities)
-            await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=str(randomactivity)))
-            await asyncio.sleep(10)
+            for item in listofactivities:
+                await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=item))
+                await asyncio.sleep(30)
 
 
 def as_currency(amount):
