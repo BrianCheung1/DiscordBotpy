@@ -56,13 +56,12 @@ class BotReady(commands.Cog):
                 safemoon_price = '{:,.8f}'.format(safemoon_price)
             except (ConnectionError, Timeout, TooManyRedirects) as e:
                 print(e)
-
             listofactivities = [f'BTC at {btc_price}',
                                 f'ETH at {eth_price}', f'LTC at {ltc_price}', f'DOGE at {doge_price}', f'SAFEMOON at ${safemoon_price}']
 
             for item in listofactivities:
                 await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=item))
-                await asyncio.sleep(30)
+                await asyncio.sleep(60)
 
 
 def as_currency(amount):
