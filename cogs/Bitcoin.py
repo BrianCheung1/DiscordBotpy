@@ -37,7 +37,7 @@ class Bitcoin(commands.Cog):
                             as_currency((float(eth["amount"]))) + " ` ", inline=False)
             embed.add_field(name="LTC: ", value="` " +
                             as_currency((float(ltc["amount"]))) + " ` ", inline=False)
-            embed.set_footer(text="Powered by Coinbase")
+            embed.set_footer(text=f"Powered by Coinbase - Time [{dt_string}]")
             await ctx.send(content=None, embed=embed)
         else:
             coin = requests.get(
@@ -164,13 +164,13 @@ class Bitcoin(commands.Cog):
         # if users wants to check a certain date and coin
         else:
             try:
-                datetime.datetime.strptime(arg1, '%Y-%m-%d')
+                datetime.strptime(arg1, '%Y-%m-%d')
             except ValueError:
                 await ctx.send("Incorrect data format, should be YYYY-MM-DD")
                 return
 
             # adds one day to argument to compensate est to utc
-            arg1UTC = datetime.datetime.strptime(
+            arg1UTC = datetime.strptime(
                 arg1, '%Y-%m-%d') + timedelta(days=1)
             today = date.today() + timedelta(days=1)
 
@@ -189,23 +189,30 @@ class Bitcoin(commands.Cog):
                 return
 
             # print out price of user inputted coin at user inputted date
-            rate = requests.get('https://api.coinbase.com/v2/prices/{}-USD/spot?date={}'.format(arg, arg1UTC)).json()[
-                'data']
+            try:
+                rate = requests.get('https://api.coinbase.com/v2/prices/{}-USD/spot?date={}'.format(arg, arg1UTC.date())).json()[
+                    'data']
+            except KeyError:
+                await ctx.send("Invalid Date/Input - Correct Input : `hist {Crypto Coin} {YYYY-MM-DD}")
+                return
             embed.add_field(name='Price {}: '.format(arg1), value="` " + as_currency(float(rate['amount'])) + " `",
+
                             inline=False)
 
             date_change = 0
             if price_now > float(rate['amount']):
                 date_change = price_now - float(rate['amount'])
-                print(date_change)
                 date_change = date_change / float(rate['amount'])
+            elif price_now < float(rate['amount']):
+                date_change = float(rate['amount']) - price_now
+                date_change = date_change / price_now
 
             embed.add_field(name='Percent Change: ',
                             value="` " + str('{:.2%}'.format(date_change)) + " `", inline=True)
             embed.set_footer(text=f"Powered by Coinbase - Time [{dt_string}]")
             await ctx.send(content=None, embed=embed)
 
-    @commands.command(aliases=['ex'])
+    @ commands.command(aliases=['ex'])
     async def exchange(self, ctx, arg=0.0, arg1='BTC'):
         """converts crypto coins to USD value"""
         rate = float(requests.get('https://api.coinbase.com/v2/prices/BTC-USD/spot').json()[
@@ -232,7 +239,7 @@ class Bitcoin(commands.Cog):
                 arg, arg1.upper(),  as_currency(converted_price)))
             await ctx.send(content=None, embed=embed)
 
-    @commands.command(aliases=['tx'])
+    @ commands.command(aliases=['tx'])
     async def transaction(self, ctx, arg=None):
         """returns link to memepool tranasction"""
         if arg == None:
