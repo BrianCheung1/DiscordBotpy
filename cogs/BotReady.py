@@ -29,6 +29,7 @@ class BotReady(commands.Cog):
     async def my_background_task(self):
         await self.bot.wait_until_ready()
 
+        while not self.bot.is_closed():
         btc_price = as_currency(float(requests.get(
             'https://api.coinbase.com/v2/prices/BTC-USD/spot').json()['data']['amount']))
         eth_price = as_currency(float(requests.get(
@@ -58,11 +59,9 @@ class BotReady(commands.Cog):
 
         listofactivities = [f'BTC at {btc_price}',
                             f'ETH at {eth_price}', f'LTC at {ltc_price}', f'DOGE at {doge_price}', f'SAFEMOON at ${safemoon_price}']
-
-        while not self.bot.is_closed():
-            for item in listofactivities:
-                await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=item))
-                await asyncio.sleep(30)
+        for item in listofactivities:
+            await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=item))
+            await asyncio.sleep(30)
 
 
 def as_currency(amount):
