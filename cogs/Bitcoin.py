@@ -2,9 +2,7 @@ import discord
 from discord.ext import commands
 import asyncio
 import requests
-from datetime import date
-from datetime import datetime, timedelta
-import datetime
+from datetime import datetime, timedelta, date
 import os
 from discord.ext import tasks
 
@@ -70,6 +68,12 @@ class Bitcoin(commands.Cog):
         lastmonth = today - timedelta(days=30)
         lastmonth_est = date.today() - timedelta(days=30)
 
+        lastyear = today - timedelta(days=365)
+        lastyear_est = date.today() - timedelta(days=365)
+
+        now = datetime.now()
+        dt_string = now.strftime("%m/%d/%Y %H:%M:%S")
+
         try:
             price_now = float(
                 requests.get('https://api.coinbase.com/v2/prices/{}-USD/spot'.format(arg)).json()[
@@ -100,6 +104,13 @@ class Bitcoin(commands.Cog):
             requests.get('https://api.coinbase.com/v2/prices/{}-USD/spot?date={}'.format(arg, lastmonth)).json()[
                 'data']['amount'])
 
+        yearly = (price_now - float(
+            requests.get('https://api.coinbase.com/v2/prices/{}-USD/spot?date={}'.format(arg, lastyear)).json()[
+                'data']['amount']))
+        yearly = yearly / float(
+            requests.get('https://api.coinbase.com/v2/prices/{}-USD/spot?date={}'.format(arg, lastyear)).json()[
+                'data']['amount'])
+
         # if no date added to arguments
         if not arg1:
             # first date format is UTC
@@ -120,17 +131,22 @@ class Bitcoin(commands.Cog):
 
             rate = requests.get('https://api.coinbase.com/v2/prices/{}-USD/spot?date={}'.format(arg, yesterday)).json()[
                 'data']
-            embed.add_field(name='Price on {}: '.format(yesterday_est),
-                            value="` " + as_currency(float(rate['amount'])) + " `", inline=False)
+            embed.add_field(name='Price {}: '.format(yesterday_est),
+                            value="` " + as_currency(float(rate['amount'])) + " `", inline=True)
 
             rate = requests.get('https://api.coinbase.com/v2/prices/{}-USD/spot?date={}'.format(arg, lastweek)).json()[
                 'data']
-            embed.add_field(name='Price on {}: '.format(lastweek_est),
-                            value="` " + as_currency(float(rate['amount'])) + " `", inline=False)
+            embed.add_field(name='Price {}: '.format(lastweek_est),
+                            value="` " + as_currency(float(rate['amount'])) + " `", inline=True)
 
             rate = requests.get('https://api.coinbase.com/v2/prices/{}-USD/spot?date={}'.format(arg, lastmonth)).json()[
                 'data']
-            embed.add_field(name='Price on {}: '.format(lastmonth_est),
+            embed.add_field(name='Price {}: '.format(lastmonth_est),
+                            value="` " + as_currency(float(rate['amount'])) + " `", inline=True)
+
+            rate = requests.get('https://api.coinbase.com/v2/prices/{}-USD/spot?date={}'.format(arg, lastyear)).json()[
+                'data']
+            embed.add_field(name='Price {}: '.format(lastyear_est),
                             value="` " + as_currency(float(rate['amount'])) + " `", inline=False)
 
             embed.add_field(name='Daily Percent Change: ',
@@ -139,8 +155,10 @@ class Bitcoin(commands.Cog):
                             value="` " + str('{:.2%}'.format(weekly)) + " `", inline=True)
             embed.add_field(name='Monthly Percent Change: ',
                             value="` " + str('{:.2%}'.format(monthly)) + " `", inline=True)
+            embed.add_field(name='Yearly Percent Change: ',
+                            value="` " + str('{:.2%}'.format(yearly)) + " `", inline=False)
 
-            embed.set_footer(text="Powered by Coinbase")
+            embed.set_footer(text=f"Powered by Coinbase - Time [{dt_string}]")
             await ctx.send(content=None, embed=embed)
 
         # if users wants to check a certain date and coin
@@ -173,7 +191,7 @@ class Bitcoin(commands.Cog):
             # print out price of user inputted coin at user inputted date
             rate = requests.get('https://api.coinbase.com/v2/prices/{}-USD/spot?date={}'.format(arg, arg1UTC)).json()[
                 'data']
-            embed.add_field(name='Price on {}: '.format(arg1), value="` " + as_currency(float(rate['amount'])) + " `",
+            embed.add_field(name='Price {}: '.format(arg1), value="` " + as_currency(float(rate['amount'])) + " `",
                             inline=False)
 
             date_change = 0
@@ -184,7 +202,7 @@ class Bitcoin(commands.Cog):
 
             embed.add_field(name='Percent Change: ',
                             value="` " + str('{:.2%}'.format(date_change)) + " `", inline=True)
-            embed.set_footer(text="Powered by Coinbase")
+            embed.set_footer(text=f"Powered by Coinbase - Time [{dt_string}]")
             await ctx.send(content=None, embed=embed)
 
     @commands.command(aliases=['ex'])
