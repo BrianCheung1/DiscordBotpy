@@ -217,6 +217,7 @@ class Bitcoin(commands.Cog):
     @ commands.command(aliases=['ex'])
     async def exchange(self, ctx, arg=0.0, arg1='BTC'):
         """converts crypto coins to USD value"""
+
         rate = float(requests.get('https://api.coinbase.com/v2/prices/BTC-USD/spot').json()[
             'data']['amount'])
         embed = discord.Embed(
@@ -227,19 +228,23 @@ class Bitcoin(commands.Cog):
             converted_price = arg * rate
             embed.add_field(name='Rate: ', value='` {} ` BTC to USD: ` {} `'.format(
                 arg, as_currency(converted_price)))
-            await ctx.send(content=None, embed=embed)
+            dollar_value = as_currency((float(rate)))
+            embed.set_footer(text=f"1 BTC ≈ {dollar_value}")
         elif arg != 0 and arg1 == 'BTC':
             converted_price = arg * rate
             embed.add_field(name='Rate: ', value='` {} ` BTC to USD: ` {} `'.format(
                 arg, as_currency(converted_price)))
-            await ctx.send(content=None, embed=embed)
+            dollar_value = as_currency((float(rate)))
+            embed.set_footer(text=f"1 BTC ≈ {dollar_value}")
         elif arg != 0 and arg1 != 'BTC':
             rate = float(requests.get('https://api.coinbase.com/v2/prices/{}-USD/spot'.format(arg1)).json()[
                 'data']['amount'])
             converted_price = arg * rate
             embed.add_field(name='Rate: ', value='` {} ` {} to USD: ` {} `'.format(
                 arg, arg1.upper(),  as_currency(converted_price)))
-            await ctx.send(content=None, embed=embed)
+            embed.set_footer(text=f"1 {arg1.upper()} ≈ {as_currency(rate)}")
+        
+        await ctx.send(content=None, embed=embed)
 
     @ commands.command(aliases=['tx'])
     async def transaction(self, ctx, arg=None):
