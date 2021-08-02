@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 from datetime import datetime
+from pytz import timezone
 
 
 class Games(commands.Cog):
@@ -10,7 +11,10 @@ class Games(commands.Cog):
         self.bot = bot
 
     @commands.command(aliases=["games", "ga"])
-    async def game(self, ctx, game_title, direct_download, steam_link,*, notes=None):
+    async def game(self, ctx, game_title, direct_download, steam_link, *, notes=None):
+        eastern = timezone('US/Eastern')
+
+
         """Displays games in embed"""
         await ctx.message.delete()
         game_title_fixed = game_title.replace("-", " ")
@@ -26,7 +30,7 @@ class Games(commands.Cog):
         embed.add_field(name="Notes: ",
                         value=notes_fixed, inline=False)
         embed.set_footer(
-            text="Time of Update [" + datetime.now().strftime("%I:%M %p") + "]")
+            text="Time of Update [" + datetime.now(eastern).strftime("%I:%M %p") + "]")
         await ctx.send(content=None, embed=embed)
 
 
