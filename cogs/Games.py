@@ -10,8 +10,9 @@ class Games(commands.Cog):
         self.bot = bot
 
     @commands.command(aliases=["games", "ga"])
-    async def game(self, ctx, game_title, direct_download, steam_link, notes=None):
+    async def game(self, ctx, game_title, direct_download, steam_link,*, notes=None):
         """Displays games in embed"""
+        await ctx.message.delete()
         game_title_fixed = game_title.replace("-", " ")
         embed = discord.Embed(
             title=f"Google Sheets Updated with {game_title_fixed}", color=ctx.author.color)
