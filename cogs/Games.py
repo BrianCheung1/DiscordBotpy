@@ -17,8 +17,8 @@ class Games(commands.Cog):
 
         """Displays games in embed"""
 
-        await ctx.message.delete()
         await asyncio.sleep(5)
+        await ctx.message.delete()
         game_title_fixed = game_title.replace("-", " ")
         embed = discord.Embed(
             title=f"Google Sheets Updated with {game_title_fixed}", color=ctx.author.color)
