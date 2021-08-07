@@ -16,8 +16,6 @@ class Games(commands.Cog):
         eastern = timezone('US/Eastern')
 
         """Displays games in embed"""
-
-        await asyncio.sleep(5)
         await ctx.message.delete()
         game_title_fixed = game_title.replace("-", " ")
         embed = discord.Embed(
@@ -27,13 +25,21 @@ class Games(commands.Cog):
         embed.add_field(name="Steam Link: ", value=steam_link, inline=False)
         embed.add_field(name="Google Sheets: ",
                         value="https://docs.google.com/spreadsheets/d/1Qlw02EessdbkTKuPPiXquPdAEtNnUXC1oBYfGk0Y13A/edit#gid=2000315673", inline=False)
-        notes_fixed = notes.replace("-", "\n")
-
-        embed.add_field(name="Notes: ",
-                        value=notes_fixed, inline=False)
-        embed.set_footer(
+        if notes==None:
+            embed.add_field(name="Notes: ",
+                            value="None", inline=False)
+            embed.set_footer(
             text="Time of Update [" + datetime.now(eastern).strftime("%I:%M %p") + "]")
-        await ctx.send(content=None, embed=embed)
+            await ctx.send(content=None, embed=embed)
+        else:
+            notes_fixed = notes.replace("-", "\n")
+
+            embed.add_field(name="Notes: ",
+                            value=notes_fixed, inline=False)
+            embed.set_footer(
+                text="Time of Update [" + datetime.now(eastern).strftime("%I:%M %p") + "]")
+            await ctx.send(content=None, embed=embed)
+        
 
 
 def setup(bot):
