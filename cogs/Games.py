@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from datetime import datetime
 from pytz import timezone
+import asyncio
 
 
 class Games(commands.Cog):
@@ -14,9 +15,10 @@ class Games(commands.Cog):
     async def game(self, ctx, game_title, direct_download, steam_link, *, notes=None):
         eastern = timezone('US/Eastern')
 
-
         """Displays games in embed"""
+
         await ctx.message.delete()
+        await asyncio.sleep(5)
         game_title_fixed = game_title.replace("-", " ")
         embed = discord.Embed(
             title=f"Google Sheets Updated with {game_title_fixed}", color=ctx.author.color)
